@@ -30,22 +30,26 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon: Icon, color, su
     purple: 'bg-purple-500',
     indigo: 'bg-indigo-500'
   }
-  
+
   return (
-    <Card hover>
-      <CardContent className="flex items-center">
-        <div className={`p-3 rounded-full ${colorClasses[color]}`}>
-          <Icon className="w-6 h-6 text-white" />
-        </div>
-        <div className="ml-4 flex-1">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="bg-white rounded-xl p-6 shadow-soft"
+    >
+      <div className="flex items-center justify-between">
+        <div>
           <p className="text-sm font-medium text-secondary-600">{title}</p>
-          <p className="text-2xl font-bold text-secondary-900">{value.toLocaleString()}</p>
+          <p className="text-3xl font-bold text-secondary-900">{value}</p>
           {subtitle && (
-            <p className="text-xs text-secondary-500">{subtitle}</p>
+            <p className="text-xs text-secondary-500 mt-1">{subtitle}</p>
           )}
         </div>
-      </CardContent>
-    </Card>
+        <div className={`p-3 rounded-lg ${colorClasses[color]}`}>
+          <Icon className="w-6 h-6 text-white" />
+        </div>
+      </div>
+    </motion.div>
   )
 }
 
@@ -84,120 +88,173 @@ export default function DashboardPage() {
   
   if (loading) {
     return (
-      <div className="space-y-6">
-        <div className="animate-pulse">
-          <div className="h-8 bg-secondary-200 rounded w-1/4 mb-6"></div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="h-32 bg-secondary-200 rounded-lg"></div>
-            ))}
+      <Layout>
+        <div className="space-y-6">
+          <div className="animate-pulse">
+            <div className="h-8 bg-secondary-200 rounded w-1/4 mb-4"></div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="bg-white rounded-xl p-6 shadow-soft">
+                  <div className="h-4 bg-secondary-200 rounded w-3/4 mb-2"></div>
+                  <div className="h-8 bg-secondary-200 rounded w-1/2"></div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      </Layout>
     )
   }
-  
+
   if (!stats) {
     return (
-      <div className="text-center py-12">
-        <p className="text-secondary-500">Erro ao carregar dados do dashboard</p>
-      </div>
+      <Layout>
+        <div className="text-center py-12">
+          <p className="text-secondary-600">Erro ao carregar dados do dashboard.</p>
+        </div>
+      </Layout>
     )
   }
-  
+
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-secondary-900">Dashboard</h1>
-        <p className="text-secondary-600">Visão geral do sistema de controle de estágio</p>
-      </div>
-      
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <StatCard
-          title="Total de Estudantes"
-          value={stats.total_estudantes}
-          icon={UserGroupIcon}
-          color="blue"
-        />
-        
-        <StatCard
-          title="Total de Empresas"
-          value={stats.total_empresas}
-          icon={BuildingOffice2Icon}
-          color="green"
-        />
-        
-        <StatCard
-          title="Total de Orientadores"
-          value={stats.total_orientadores}
-          icon={AcademicCapIcon}
-          color="purple"
-        />
-        
-        <StatCard
-          title="Estágios Obrigatórios"
-          value={stats.estagios_obrigatorios.total}
-          icon={DocumentTextIcon}
-          color="indigo"
-          subtitle={`${stats.estagios_obrigatorios.em_andamento} em andamento, ${stats.estagios_obrigatorios.concluidos} concluídos`}
-        />
-        
-        <StatCard
-          title="Estágios Não Obrigatórios"
-          value={stats.estagios_nao_obrigatorios.total}
-          icon={DocumentTextIcon}
-          color="yellow"
-          subtitle={`${stats.estagios_nao_obrigatorios.em_andamento} em andamento, ${stats.estagios_nao_obrigatorios.concluidos} concluídos`}
-        />
-        
-        <StatCard
-          title="Alertas Pendentes"
-          value={stats.alertas_pendentes}
-          icon={BellIcon}
-          color="red"
-        />
-      </div>
-      
-      {/* Additional Info Cards */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl p-6 shadow-soft">
-          <h3 className="text-lg font-semibold text-secondary-900 mb-4 flex items-center">
-            <DocumentTextIcon className="w-5 h-5 mr-2 text-primary-600" />
-            Resumo de Estágios
-          </h3>
-          <div>
+    <Layout>
+      <div className="space-y-6">
+        {/* Header */}
+        <div>
+          <h1 className="text-2xl font-bold text-secondary-900">Dashboard</h1>
+          <p className="text-secondary-600">Visão geral do sistema de estágio</p>
+        </div>
+
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <StatCard
+            title="Total de Estudantes"
+            value={stats.total_estudantes}
+            icon={UserGroupIcon}
+            color="blue"
+          />
+          
+          <StatCard
+            title="Total de Empresas"
+            value={stats.total_empresas}
+            icon={BuildingOffice2Icon}
+            color="green"
+          />
+          
+          <StatCard
+            title="Total de Orientadores"
+            value={stats.total_orientadores}
+            icon={AcademicCapIcon}
+            color="purple"
+          />
+          
+          <StatCard
+            title="Certificados Emitidos"
+            value={stats.certificados_emitidos}
+            icon={CheckBadgeIcon}
+            color="indigo"
+          />
+        </div>
+
+        {/* Estágios Stats */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Estágios Obrigatórios */}
+          <div className="bg-white rounded-xl p-6 shadow-soft">
+            <h3 className="text-lg font-semibold text-secondary-900 mb-4 flex items-center">
+              <DocumentTextIcon className="w-5 h-5 mr-2 text-primary-600" />
+              Estágios Obrigatórios
+            </h3>
             <div className="space-y-4">
-              <div>
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm text-secondary-600">Obrigatórios em Andamento</span>
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-secondary-600">Total</span>
+                <span className="font-semibold text-lg">{stats.estagios_obrigatorios.total}</span>
+              </div>
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-secondary-600">Em Andamento</span>
                   <span className="font-medium">{stats.estagios_obrigatorios.em_andamento}</span>
                 </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-secondary-600">Concluídos</span>
+                  <span className="font-medium">{stats.estagios_obrigatorios.concluidos}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-secondary-600">Cancelados</span>
+                  <span className="font-medium">{stats.estagios_obrigatorios.cancelados}</span>
+                </div>
+              </div>
+              
+              {/* Progress Bar */}
+              <div className="mt-4">
+                <div className="flex justify-between text-xs text-secondary-500 mb-1">
+                  <span>Progresso</span>
+                  <span>
+                    {stats.estagios_obrigatorios.total > 0 
+                      ? Math.round((stats.estagios_obrigatorios.concluidos / stats.estagios_obrigatorios.total) * 100)
+                      : 0
+                    }%
+                  </span>
+                </div>
                 <div className="w-full bg-secondary-200 rounded-full h-2">
-                  <div 
-                    className="bg-primary-600 h-2 rounded-full" 
+                  <div
+                    className="bg-primary-600 h-2 rounded-full transition-all duration-300"
                     style={{
                       width: `${stats.estagios_obrigatorios.total > 0 
-                        ? (stats.estagios_obrigatorios.em_andamento / stats.estagios_obrigatorios.total) * 100 
-                        : 0}%`
+                        ? (stats.estagios_obrigatorios.concluidos / stats.estagios_obrigatorios.total) * 100
+                        : 0
+                      }%`
                     }}
                   ></div>
                 </div>
               </div>
-              
-              <div>
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm text-secondary-600">Não Obrigatórios em Andamento</span>
+            </div>
+          </div>
+
+          {/* Estágios Não Obrigatórios */}
+          <div className="bg-white rounded-xl p-6 shadow-soft">
+            <h3 className="text-lg font-semibold text-secondary-900 mb-4 flex items-center">
+              <DocumentTextIcon className="w-5 h-5 mr-2 text-success-600" />
+              Estágios Não Obrigatórios
+            </h3>
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-secondary-600">Total</span>
+                <span className="font-semibold text-lg">{stats.estagios_nao_obrigatorios.total}</span>
+              </div>
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-secondary-600">Em Andamento</span>
                   <span className="font-medium">{stats.estagios_nao_obrigatorios.em_andamento}</span>
                 </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-secondary-600">Concluídos</span>
+                  <span className="font-medium">{stats.estagios_nao_obrigatorios.concluidos}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-secondary-600">Cancelados</span>
+                  <span className="font-medium">{stats.estagios_nao_obrigatorios.cancelados}</span>
+                </div>
+              </div>
+              
+              {/* Progress Bar */}
+              <div className="mt-4">
+                <div className="flex justify-between text-xs text-secondary-500 mb-1">
+                  <span>Progresso</span>
+                  <span>
+                    {stats.estagios_nao_obrigatorios.total > 0 
+                      ? Math.round((stats.estagios_nao_obrigatorios.concluidos / stats.estagios_nao_obrigatorios.total) * 100)
+                      : 0
+                    }%
+                  </span>
+                </div>
                 <div className="w-full bg-secondary-200 rounded-full h-2">
-                  <div 
-                    className="bg-success-600 h-2 rounded-full" 
+                  <div
+                    className="bg-success-600 h-2 rounded-full transition-all duration-300"
                     style={{
                       width: `${stats.estagios_nao_obrigatorios.total > 0 
-                        ? (stats.estagios_nao_obrigatorios.em_andamento / stats.estagios_nao_obrigatorios.total) * 100 
-                        : 0}%`
+                        ? (stats.estagios_nao_obrigatorios.concluidos / stats.estagios_nao_obrigatorios.total) * 100
+                        : 0
+                      }%`
                     }}
                   ></div>
                 </div>
@@ -205,13 +262,41 @@ export default function DashboardPage() {
             </div>
           </div>
         </div>
-        
-        <div className="bg-white rounded-xl p-6 shadow-soft">
-          <h3 className="text-lg font-semibold text-secondary-900 mb-4 flex items-center">
-                          <CheckBadgeIcon className="w-5 h-5 mr-2 text-success-600" />
-            Certificados e Alertas
-          </h3>
-          <div>
+
+        {/* Additional Info Cards */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="bg-white rounded-xl p-6 shadow-soft">
+            <h3 className="text-lg font-semibold text-secondary-900 mb-4 flex items-center">
+              <DocumentTextIcon className="w-5 h-5 mr-2 text-primary-600" />
+              Resumo de Estágios
+            </h3>
+            <div className="space-y-4">
+              <div>
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm text-secondary-600">Obrigatórios em Andamento</span>
+                  <span className="font-medium">{stats.estagios_obrigatorios.em_andamento}</span>
+                </div>
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm text-secondary-600">Não Obrigatórios em Andamento</span>
+                  <span className="font-medium">{stats.estagios_nao_obrigatorios.em_andamento}</span>
+                </div>
+                <div className="border-t pt-2 mt-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm font-medium text-secondary-700">Total em Andamento</span>
+                    <span className="font-semibold text-primary-600">
+                      {stats.estagios_obrigatorios.em_andamento + stats.estagios_nao_obrigatorios.em_andamento}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="bg-white rounded-xl p-6 shadow-soft">
+            <h3 className="text-lg font-semibold text-secondary-900 mb-4 flex items-center">
+              <CheckBadgeIcon className="w-5 h-5 mr-2 text-success-600" />
+              Certificados e Alertas
+            </h3>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-secondary-600">Certificados Emitidos</span>
@@ -220,22 +305,23 @@ export default function DashboardPage() {
               
               <div className="flex items-center justify-between">
                 <span className="text-sm text-secondary-600">Alertas Pendentes</span>
-                <span className={`text-2xl font-bold ${stats.alertas_pendentes > 0 ? 'text-danger-600' : 'text-success-600'}`}>
-                  {stats.alertas_pendentes}
-                </span>
+                <span className="text-2xl font-bold text-warning-600">{stats.alertas_pendentes}</span>
               </div>
               
               {stats.alertas_pendentes > 0 && (
-                <div className="bg-danger-50 border border-danger-200 rounded-md p-3">
-                  <p className="text-sm text-danger-700">
-                    Existem alertas pendentes que requerem atenção.
-                  </p>
+                <div className="mt-4 p-3 bg-warning-50 border border-warning-200 rounded-md">
+                  <div className="flex items-center">
+                    <BellIcon className="w-4 h-4 text-warning-600 mr-2" />
+                    <span className="text-sm text-warning-700">
+                      Existem alertas pendentes que requerem atenção.
+                    </span>
+                  </div>
                 </div>
               )}
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </Layout>
   )
 }
