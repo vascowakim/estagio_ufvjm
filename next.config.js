@@ -2,35 +2,44 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  trailingSlash: true,
-  exportPathMap: async function (
-    defaultPathMap,
-    { dev, dir, outDir, distDir, buildId }
-  ) {
-    return {
-      '/': { page: '/' },
-      '/login': { page: '/login' },
-      '/dashboard': { page: '/dashboard' },
-      '/estudantes': { page: '/estudantes' },
-      '/empresas': { page: '/empresas' },
-      '/orientadores': { page: '/orientadores' },
-      '/estagios': { page: '/estagios' },
-      '/relatorios': { page: '/relatorios' },
-      '/certificados': { page: '/certificados' },
-      '/configuracoes': { page: '/configuracoes' },
-    }
-  },
   images: {
     unoptimized: true,
   },
-  env: {
-    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
-    NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  experimental: {
+    serverComponentsExternalPackages: ['sqlite3'],
   },
-  // Configuração para Wix
-  output: 'export',
-  distDir: 'dist',
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/estagio-pro/' : '',
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        path: false,
+        crypto: false,
+      };
+    }
+    return config;
+  },
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'origin-when-cross-origin',
+          },
+        ],
+      },
+    ];
+  },
 }
 
 module.exports = nextConfig

@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
-import { ApiService } from '@/services/api'
+import Layout from '@/components/Layout'
 import { DashboardStats } from '@/types'
+import { motion } from 'framer-motion'
+import toast from 'react-hot-toast'
+import Cookies from 'js-cookie'
 import {
   UserGroupIcon,
   BuildingOfficeIcon,
   AcademicCapIcon,
   DocumentTextIcon,
   BellIcon,
-  CertificateIcon
+  DocumentCheckIcon
 } from '@heroicons/react/24/outline'
 
 interface StatCardProps {
@@ -52,22 +54,33 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true)
   
   useEffect(() => {
-    const loadStats = async () => {
+    const fetchStats = async () => {
       try {
-        const response = await ApiService.getDashboardStats()
+        const token = Cookies.get('auth-token');
         
-        if (response.success && response.data) {
-          setStats(response.data)
+        const response = await fetch('/api/dashboard/stats', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          setStats(data.data);
+        } else {
+          toast.error('Erro ao carregar estatísticas');
         }
       } catch (error) {
-        console.error('Erro ao carregar estatísticas:', error)
+        console.error('Erro ao buscar estatísticas:', error);
+        toast.error('Erro ao conectar com o servidor');
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
-    
-    loadStats()
-  }, [])
+    };
+
+    fetchStats();
+  }, []);
   
   if (loading) {
     return (
@@ -149,14 +162,12 @@ export default function DashboardPage() {
       
       {/* Additional Info Cards */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <DocumentTextIcon className="w-5 h-5 mr-2 text-primary-600" />
-              Resumo de Estágios
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
+        <div className="bg-white rounded-xl p-6 shadow-soft">
+          <h3 className="text-lg font-semibold text-secondary-900 mb-4 flex items-center">
+            <DocumentTextIcon className="w-5 h-5 mr-2 text-primary-600" />
+            Resumo de Estágios
+          </h3>
+          <div>
             <div className="space-y-4">
               <div>
                 <div className="flex justify-between items-center mb-2">
@@ -192,17 +203,15 @@ export default function DashboardPage() {
                 </div>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
         
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <CertificateIcon className="w-5 h-5 mr-2 text-success-600" />
-              Certificados e Alertas
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
+        <div className="bg-white rounded-xl p-6 shadow-soft">
+          <h3 className="text-lg font-semibold text-secondary-900 mb-4 flex items-center">
+            <DocumentCheckIcon className="w-5 h-5 mr-2 text-success-600" />
+            Certificados e Alertas
+          </h3>
+          <div>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-secondary-600">Certificados Emitidos</span>
@@ -224,8 +233,8 @@ export default function DashboardPage() {
                 </div>
               )}
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     </div>
   )

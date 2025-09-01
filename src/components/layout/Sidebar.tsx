@@ -9,12 +9,11 @@ import {
   AcademicCapIcon,
   DocumentTextIcon,
   BellIcon,
-  CertificateIcon,
+  DocumentCheckIcon,
   ChartBarIcon,
   CogIcon,
   ArrowRightOnRectangleIcon
 } from '@heroicons/react/24/outline'
-import { AuthService } from '@/services/auth'
 import { User } from '@/types'
 
 interface SidebarProps {
@@ -73,7 +72,7 @@ const menuItems: MenuItem[] = [
   {
     name: 'Certificados',
     href: '/certificados',
-    icon: CertificateIcon
+    icon: DocumentCheckIcon
   },
   {
     name: 'Relatórios',
