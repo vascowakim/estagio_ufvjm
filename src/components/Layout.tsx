@@ -6,10 +6,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   HomeIcon,
   UserGroupIcon,
-  BuildingOfficeIcon,
+  BuildingOffice2Icon,
   AcademicCapIcon,
   DocumentTextIcon,
-  DocumentCheckIcon,
+  CheckBadgeIcon,
   ChartBarIcon,
   CogIcon,
   ArrowRightOnRectangleIcon,
@@ -33,11 +33,11 @@ interface MenuItem {
 const menuItems: MenuItem[] = [
   { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
   { name: 'Estudantes', href: '/estudantes', icon: UserGroupIcon, adminOnly: true },
-  { name: 'Empresas', href: '/empresas', icon: BuildingOfficeIcon, adminOnly: true },
+  { name: 'Empresas', href: '/empresas', icon: BuildingOffice2Icon, adminOnly: true },
   { name: 'Orientadores', href: '/orientadores', icon: AcademicCapIcon, adminOnly: true },
   { name: 'Estágios Obrigatórios', href: '/estagios/obrigatorios', icon: DocumentTextIcon },
   { name: 'Estágios Não Obrigatórios', href: '/estagios/nao-obrigatorios', icon: DocumentTextIcon },
-  { name: 'Certificados', href: '/certificados', icon: DocumentCheckIcon },
+  { name: 'Certificados', href: '/certificados', icon: CheckBadgeIcon },
   { name: 'Relatórios', href: '/relatorios', icon: ChartBarIcon },
   { name: 'Configurações', href: '/configuracoes', icon: CogIcon, adminOnly: true },
 ];

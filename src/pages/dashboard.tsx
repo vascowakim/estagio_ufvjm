@@ -6,11 +6,11 @@ import toast from 'react-hot-toast'
 import Cookies from 'js-cookie'
 import {
   UserGroupIcon,
-  BuildingOfficeIcon,
+  BuildingOffice2Icon,
   AcademicCapIcon,
   DocumentTextIcon,
   BellIcon,
-  DocumentCheckIcon
+  CheckBadgeIcon
 } from '@heroicons/react/24/outline'
 
 interface StatCardProps {
@@ -125,7 +125,7 @@ export default function DashboardPage() {
         <StatCard
           title="Total de Empresas"
           value={stats.total_empresas}
-          icon={BuildingOfficeIcon}
+          icon={BuildingOffice2Icon}
           color="green"
         />
         
@@ -208,7 +208,7 @@ export default function DashboardPage() {
         
         <div className="bg-white rounded-xl p-6 shadow-soft">
           <h3 className="text-lg font-semibold text-secondary-900 mb-4 flex items-center">
-            <DocumentCheckIcon className="w-5 h-5 mr-2 text-success-600" />
+                          <CheckBadgeIcon className="w-5 h-5 mr-2 text-success-600" />
             Certificados e Alertas
           </h3>
           <div>

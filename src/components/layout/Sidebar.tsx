@@ -5,11 +5,11 @@ import { clsx } from 'clsx'
 import {
   HomeIcon,
   UserGroupIcon,
-  BuildingOfficeIcon,
+  BuildingOffice2Icon,
   AcademicCapIcon,
   DocumentTextIcon,
   BellIcon,
-  DocumentCheckIcon,
+  CheckBadgeIcon,
   ChartBarIcon,
   CogIcon,
   ArrowRightOnRectangleIcon
@@ -44,7 +44,7 @@ const menuItems: MenuItem[] = [
   {
     name: 'Empresas',
     href: '/empresas',
-    icon: BuildingOfficeIcon,
+    icon: BuildingOffice2Icon,
     adminOnly: true
   },
   {
@@ -72,7 +72,7 @@ const menuItems: MenuItem[] = [
   {
     name: 'Certificados',
     href: '/certificados',
-    icon: DocumentCheckIcon
+    icon: CheckBadgeIcon
   },
   {
     name: 'Relatórios',
